@@ -24,6 +24,9 @@
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "jest": {
+    "preset": "ts-jest"
+  },
   "devDependencies": {
     "@types/jest": "29.2.5",
     "@typescript-eslint/eslint-plugin": "5.48.0",
