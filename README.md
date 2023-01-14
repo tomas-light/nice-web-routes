@@ -1,5 +1,6 @@
 * [Installation](#install)
 * [How to use](#usage)
+* [Using with react-router](#react-router)
 * [Customization](#customization)
   * [FactoryConfig](#config)
   * [Creating strategies](#strategies)
@@ -34,6 +35,56 @@ routes.users.statistic.relativeUrl(); // 'statistic'
 
 routes.user.userId().relativeUrl(); // ':userId'
 routes.user.userId('18').private_info.url(); // '/user/18/private-info'
+```
+
+### <a name="react-router"></a> Using with react-router
+
+```tsx
+import { createNiceWebRoutes } from 'nice-web-routes';
+import { Navigate, Route, Routes } from 'react-router-dom';
+
+const appRoutes = createNiceWebRoutes({
+  auth: {
+    login: {},
+    registration: {},
+  },
+  profile: {
+    userId: () => ({}),
+    settings: {},
+    edit: {
+      personal: {},
+      career: {},
+    },
+  },
+});
+
+const App = () => (
+  <Routes>
+    <Route index element={<Navigate to={appRoutes.auth.relativeUrl()} replace />} />
+
+    <Route path={appRoutes.auth.url('/*')}> {/* '/auth/*' */}
+      <Route index element={<Navigate to={appRoutes.auth.login.relativeUrl()} replace />} />
+
+      <Route path={appRoutes.auth.login.relativeUrl()} element={<LoginDisplay />} />
+      <Route path={appRoutes.auth.registration.relativeUrl()} element={<RegistrationDisplay />} />
+    </Route>
+
+    <Route path={appRoutes.profile.url('/*')}> {/* '/profile/*' */}
+      <Route index element={<MyProfileDisplay />} />
+
+      <Route path={appRoutes.profile.userId().relativeUrl()} element={<UserProfile />} />
+      <Route path={appRoutes.profile.settings.relativeUrl()} element={<SettingsDisplay />} />
+
+      <Route path={appRoutes.profile.edit.relativeUrl('/*')}> {/* 'edit/*' */}
+        <Route index element={<ProfileSettings />} />
+
+        <Route path={appRoutes.profile.edit.career.relativeUrl()} element={<EditCareerDisplay />} />
+        <Route path={appRoutes.profile.edit.personal.relativeUrl()} element={<EditPersonalInformationDisplay />} />
+      </Route>
+    </Route>
+  </Routes>
+);
+
 ```
 
 ### <a name="customization"></a> Customization

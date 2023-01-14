@@ -1,5 +1,5 @@
 import { defaultSegmentValueGetter } from '../defaultSegmentValueGetter';
-import { joinRouteSegments } from '../joinRouteSegments';
+import { joinRouteSegments } from '../utils/joinRouteSegments';
 import {
   NICE_WEB_ROUTE_URLS_KEYS,
   NiceWebRoutesDescription,
@@ -38,15 +38,15 @@ export const createObjectNiceWebRoutes: CreatingStrategy = (config = {}) =>
 
     const node = {
       url: function <Search extends Record<string, string>>(
-        searchParams?: Search
+        searchParams?: Search | string
       ) {
         return new UrlBuilderImpl()
           .addPathnameIfExists(routePath)
           .addSearchParamsIfExists(searchParams)
           .build();
       },
-      relativeUrl: function () {
-        return currentSegmentName;
+      relativeUrl: function (additionalString: string = '') {
+        return currentSegmentName + additionalString;
       },
     } as NiceWebRoutesNode<
       DescriptionShape,
@@ -69,8 +69,7 @@ export const createObjectNiceWebRoutes: CreatingStrategy = (config = {}) =>
         let segment: string;
         if (snakeTransformation.disableForSegmentName) {
           segment = descriptionSegment;
-        }
-        else {
+        } else {
           segment = snakeCaseToDashCase(descriptionSegment);
         }
 
@@ -84,7 +83,7 @@ export const createObjectNiceWebRoutes: CreatingStrategy = (config = {}) =>
       }
 
       if (typeof descriptionSegmentValue === 'function') {
-        const parametrizedRoute: ParametrizedNiceWebRoute<any> = value => {
+        const parametrizedRoute: ParametrizedNiceWebRoute<any> = (value) => {
           const description = descriptionSegmentValue();
 
           let segmentValue = getSegmentValue(descriptionSegment, value);

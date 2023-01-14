@@ -46,6 +46,12 @@ describe.each(testTable)('%s creating strategy', (strategyName) => {
   test('if relative url on second level equals "statistic"', () => {
     expect(routes.users.statistic.relativeUrl()).toBe('statistic');
   });
+  test('if full url on second level with additional string equals "/users/statistic/*"', () => {
+    expect(routes.users.statistic.url('/*')).toBe('/users/statistic/*');
+  });
+  test('if full url on second level with additional string equals "/users/statistic/*"', () => {
+    expect(routes.users.statistic.relativeUrl('/*')).toBe('statistic/*');
+  });
 
   test('if full url of parametrized route on first level WITHOUT value equals "/:article"', () => {
     expect(routes.article().url()).toBe('/:article');

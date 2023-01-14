@@ -1,4 +1,4 @@
-import { joinRouteSegments } from './joinRouteSegments';
+import { joinRouteSegments } from './utils/joinRouteSegments';
 import { snakeCaseToDashCase, UrlBuilderConstructor } from './utils';
 
 function makeSearchUrl(

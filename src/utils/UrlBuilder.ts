@@ -1,7 +1,9 @@
 export interface UrlBuilder {
   addPathnameIfExists(pathname?: string): UrlBuilder;
 
-  addSearchParamsIfExists(searchParams?: Record<string, string>): UrlBuilder;
+  addSearchParamsIfExists(
+    searchParams?: Record<string, string> | string
+  ): UrlBuilder;
 
   build(): string;
 }

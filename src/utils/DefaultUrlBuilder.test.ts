@@ -54,3 +54,19 @@ test('if nullable search params will ignored', () => {
     .build();
   expect(url).toBe('/?one=1&three=three');
 });
+
+test('if additional string was passed in search params', () => {
+  const builder = new DefaultUrlBuilder();
+  const url = builder.addSearchParamsIfExists('*').build();
+  expect(url).toBe('/*');
+});
+
+test('if additional string was passed in search params with other data', () => {
+  const builder = new DefaultUrlBuilder();
+  const url = builder
+    .addPathnameIfExists('some-url')
+    .addPathnameIfExists('asd')
+    .addSearchParamsIfExists('*')
+    .build();
+  expect(url).toBe('/some-url/asd*');
+});

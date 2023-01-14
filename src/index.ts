@@ -2,4 +2,9 @@ export * from './configureNiceWebRoutesCreating';
 export * from './createNiceWebRoutes';
 export * from './strategies';
 export * from './types';
-export { UrlBuilder, DefaultUrlBuilder } from './utils';
+export {
+  UrlBuilder,
+  DefaultUrlBuilder,
+  joinRouteSegments,
+  snakeCaseToDashCase,
+} from './utils';

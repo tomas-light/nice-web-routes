@@ -7,12 +7,14 @@ function joinRouteSegments(...segments: string[]) {
   const routeSegmentSeparator = '/';
 
   return segments
+    .flatMap((segment) => segment.split(routeSegmentSeparator))
     .map((segment) => {
       if (segment.endsWith(routeSegmentSeparator)) {
         return segment.slice(0, segment.length - 2);
       }
       return segment;
     })
+    .filter((segment) => segment !== '')
     .join(routeSegmentSeparator);
 }
 

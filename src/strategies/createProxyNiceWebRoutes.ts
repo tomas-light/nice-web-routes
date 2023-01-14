@@ -1,5 +1,5 @@
 import { defaultSegmentValueGetter } from '../defaultSegmentValueGetter';
-import { joinRouteSegments } from '../joinRouteSegments';
+import { joinRouteSegments } from '../utils/joinRouteSegments';
 import {
   NICE_WEB_ROUTE_URLS_KEYS,
   NiceWebRoutesDescription,
@@ -40,15 +40,15 @@ export const createProxyNiceWebRoutes: CreatingStrategy = (config = {}) =>
     const proxy = new Proxy<ProxyType>(
       {
         url: function <Search extends Record<string, string>>(
-          searchParams?: Search
+          searchParams?: Search | string
         ) {
           return new UrlBuilderImpl()
             .addPathnameIfExists(routePath)
             .addSearchParamsIfExists(searchParams)
             .build();
         },
-        relativeUrl: function () {
-          return currentSegmentName;
+        relativeUrl: function (additionalString: string = '') {
+          return currentSegmentName + additionalString;
         },
       },
       {
