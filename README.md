@@ -33,6 +33,9 @@ routes.users.url(); // '/users'
 routes.users.statistic.url(); // '/users/statistic'
 routes.users.statistic.relativeUrl(); // 'statistic'
 
+routes.users.statistic.url({ view: 'print', filter: 'no' }); // '/users/statistic?view=print&filter=no'
+routes.users.statistic.url('/*'); // '/users/statistic/*'
+
 routes.user.userId().relativeUrl(); // ':userId'
 routes.user.userId('18').private_info.url(); // '/user/18/private-info'
 ```
