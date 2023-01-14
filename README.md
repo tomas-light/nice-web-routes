@@ -1,8 +1,8 @@
 * [Installation](#install)
 * [How to use](#usage)
 * [Customization](#customization)
-** [FactoryConfig](#config)
-** [Creating strategies](#strategies)
+  * [FactoryConfig](#config)
+  * [Creating strategies](#strategies)
 
 ### <a name="install"></a> Installation
 
