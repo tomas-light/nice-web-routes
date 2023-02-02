@@ -25,6 +25,8 @@ const routes = createNiceWebRoutes({
       avatar: {},
       private_info: {},
     }),
+    // typed parameter
+    form: (form: 'create' | 'edit') => ({}),
   },
 });
 
@@ -38,6 +40,11 @@ routes.users.statistic.url('/*'); // '/users/statistic/*'
 
 routes.user.userId().relativeUrl(); // ':userId'
 routes.user.userId('18').private_info.url(); // '/user/18/private-info'
+
+// typed parameter
+routes.user.form('create').url(); // '/user/create'
+routes.user.form('edit').url(); // '/user/edit'
+routes.user.form('something').url(); // error because it violates type constraint of 'create' | 'edit' | undefined
 ```
 
 ### <a name="react-router"></a> Using with react-router
@@ -127,12 +134,12 @@ routes.user.userId('18').url(); // '/user/argument_18'
 
 #### <a name="config"></a> FactoryConfig
 
-| Property  | Type                                                                                          | Description                                                                                | Default value                                                                   |
-|-----------|-----------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
-| `getSegmentValue` | `GetSegmentValue` => `(segmentName: string, segmentValue: string &#124; undefined) => string` | It is responsible for displaying parametrized route value                                  | value is displayed as is, and when there is no value it shows as `:segmentName` |
-| `UrlBuilderImpl` | `UrlBuilderConstructor` => class that implements `UrlBuilder` interface                       | You can override how the target url is creating                                            | `DefaultUrlBuilder` - internal implementation                                   |
-|  `creatingStrategy`                | `CreatingStrategyVariant` => `'proxy' &#124; 'object'`                                                                                  | it is about how your routes object is created (see [Creating strategies](#strategies) section bellow) | `object`                                                                        |
-|  `snakeTransformation`                                  |  `{ disableForSegmentName?: boolean; disableForSegmentValue?: boolean; }`                                                                                            | You can disable transformation of `user_list` segment name or value to `user-list` url part | `{}`              |
+| Property              | Type                                                                                          | Description                                                                                | Default value                                                                   |
+|-----------------------|-----------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| `getSegmentValue`     | `GetSegmentValue` => `(segmentName: string, segmentValue: string &#124; undefined) => string` | It is responsible for displaying parametrized route value                                  | value is displayed as is, and when there is no value it shows as `:segmentName` |
+| `urlBuilderImpl`      | `UrlBuilderConstructor` => class that implements `UrlBuilder` interface                       | You can override how the target url is creating                                            | `DefaultUrlBuilder` - internal implementation                                   |
+| `creatingStrategy`    | `CreatingStrategyVariant` => `'proxy' &#124; 'object'`                                                                                  | it is about how your routes object is created (see [Creating strategies](#strategies) section bellow) | `object`                                                                        |
+| `snakeTransformation` |  `{ disableForSegmentName?: boolean; disableForSegmentValue?: boolean; }`                                                                                            | You can disable transformation of `user_list` segment name or value to `user-list` url part | `{}`              |
 
 
 #### <a name="strategies"></a> Creating strategies

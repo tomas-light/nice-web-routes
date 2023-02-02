@@ -27,7 +27,7 @@ export const createObjectNiceWebRoutes: CreatingStrategy = (config = {}) =>
   > {
     const {
       getSegmentValue = defaultSegmentValueGetter,
-      UrlBuilderImpl = DefaultUrlBuilder,
+      urlBuilderImpl = DefaultUrlBuilder,
       snakeTransformation = {
         disableForSegmentName: false,
         disableForSegmentValue: false,
@@ -40,7 +40,7 @@ export const createObjectNiceWebRoutes: CreatingStrategy = (config = {}) =>
       url: function <Search extends Record<string, string>>(
         searchParams?: Search | string
       ) {
-        return new UrlBuilderImpl()
+        return new urlBuilderImpl()
           .addPathnameIfExists(routePath)
           .addSearchParamsIfExists(searchParams)
           .build();

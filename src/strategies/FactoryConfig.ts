@@ -4,7 +4,7 @@ import { CreatingStrategyVariant } from './creatingStrategies';
 
 export type FactoryConfig = {
   getSegmentValue?: GetSegmentValue;
-  UrlBuilderImpl?: UrlBuilderConstructor;
+  urlBuilderImpl?: UrlBuilderConstructor;
   creatingStrategy?: CreatingStrategyVariant;
 
   snakeTransformation?: {

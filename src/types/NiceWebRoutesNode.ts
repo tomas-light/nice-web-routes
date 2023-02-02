@@ -6,17 +6,17 @@ type NiceWebRoutesNode<
 > = {
   [propertyName in keyof RoutesDescription]: RoutesDescription[propertyName] extends () => infer NestedRoutes
     ? ParametrizedNiceWebRoute<NestedRoutes>
-    : NestedNiceWebRoutes<RoutesDescription[propertyName]>;
+    : RoutesDescription[propertyName] extends (parameter: infer Parameter) => infer NestedRoutes
+      ? ParametrizedNiceWebRoute<NestedRoutes, Parameter>
+      : NestedNiceWebRoutes<RoutesDescription[propertyName]>;
 } & NiceWebRouteUrls;
 
-type ParametrizedNiceWebRoute<NestedRoutes> = (
-  value?: string
+type ParametrizedNiceWebRoute<NestedRoutes, Parameter = string> = (
+  parameter?: Parameter
 ) => NestedNiceWebRoutes<NestedRoutes>;
 
 type NestedNiceWebRoutes<NestedRouteDescription> =
-  NestedRouteDescription extends NiceWebRoutesDescription<
-    infer DescriptionShape
-  >
+  NestedRouteDescription extends NiceWebRoutesDescription<infer DescriptionShape>
     ? NiceWebRoutesNode<DescriptionShape>
     : never;
 
@@ -26,23 +26,30 @@ type ForbiddenNames =
 type FilterReservedNames<RouteSegment> = 'url' extends RouteSegment
   ? ForbiddenNames
   : 'relativeUrl' extends RouteSegment
-  ? ForbiddenNames
-  : true;
+    ? ForbiddenNames
+    : true;
 
 type NiceWebRoutesDescription<DescriptionShape extends object> = {
   [routeSegment in keyof DescriptionShape]: FilterReservedNames<routeSegment> extends ForbiddenNames
     ? ForbiddenNames
     : DescriptionShape[routeSegment] extends infer MaybeObjectOrFunction
-    ? NiceWebRoutesDescriptionValue<MaybeObjectOrFunction>
-    : DescriptionShape[routeSegment];
+      ? NiceWebRoutesDescriptionValue<MaybeObjectOrFunction>
+      : DescriptionShape[routeSegment];
 };
 
 type NiceWebRoutesDescriptionValue<MaybeObjectOrFunction> =
-  MaybeObjectOrFunction extends () => infer FunctionResult
+  MaybeObjectOrFunction extends (...parameter: infer Parameter) => infer FunctionResult
     ? FunctionResult extends object
-      ? () => NiceWebRoutesDescription<FunctionResult>
-      : 'function description has to return an object'
-    : MaybeObjectOrFunction extends object
+      ? Parameter[0] extends string
+        ? (...parameter: Parameter) => NiceWebRoutesDescription<FunctionResult>
+
+        : Parameter[0] extends undefined
+          ? () => NiceWebRoutesDescription<FunctionResult>
+          : 'parametrized argument has to be a string'
+
+    : 'function description has to return an object'
+
+  : MaybeObjectOrFunction extends object
     ? NiceWebRoutesDescription<MaybeObjectOrFunction>
     : 'route description has to be an object or function';
 
