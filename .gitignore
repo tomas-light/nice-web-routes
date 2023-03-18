@@ -1,5 +1,8 @@
-/node_modules/
-.idea/**
-/dist/
-/coverage/
+# JetBrains Rider
+.idea/
 .yarn
+
+node_modules
+dist/*
+
+/test-coverage

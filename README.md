@@ -1,3 +1,10 @@
+# nice-web-routes
+
+Easy way to create nice web routes for you application
+
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mui/material-ui/blob/HEAD/LICENSE)
+[![npm latest package](https://img.shields.io/npm/v/nice-web-routes/latest.svg)](https://img.shields.io/npm/v/nice-web-routes/latest.svg)
+
 * [Installation](#install)
 * [How to use](#usage)
 * [Using with react-router](#react-router)

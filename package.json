@@ -2,11 +2,8 @@
   "name": "nice-web-routes",
   "version": "1.0.4",
   "description": "Easy way to create nice web routes for you application",
-  "contributors": [
-    "Artem Ignatev <art.ser.ignatiev@gmail.com>"
-  ],
-  "author": "TomasLight",
-  "repository": "git@github.com:TomasLight/nice-web-routes.git",
+  "author": "Artem Ignatev <art.ser.ignatiev@gmail.com>",
+  "repository": "git@github.com:tomas-light/nice-web-routes.git",
   "homepage": "https://github.com/TomasLight/nice-web-routes#readme",
   "bugs": {
     "url": "https://github.com/TomasLight/nice-web-routes/issues"
@@ -17,16 +14,13 @@
     "build": "tsc",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "test": "jest"
+    "test": "jest --coverage=true"
   },
   "files": [
     "dist/**/*"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "jest": {
-    "preset": "ts-jest"
-  },
   "devDependencies": {
     "@types/jest": "29.2.5",
     "@typescript-eslint/eslint-plugin": "5.48.0",
