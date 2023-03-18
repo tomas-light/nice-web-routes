@@ -1,6 +1,6 @@
 # JetBrains Rider
 .idea/
-.yarn
+.yarn/cache
 
 node_modules
 dist/*
