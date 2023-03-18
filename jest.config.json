@@ -1,9 +1,9 @@
 {
   "preset": "ts-jest",
   "coverageDirectory": "<rootDir>/test-coverage",
-  "coverageReporters": ["json", "html-spa"],
+  "coverageReporters": ["json", "text"],
   "collectCoverageFrom": [
-    "<rootDir>/src/**/*.{ts,ts}"
+    "<rootDir>/src/**/*.ts"
   ],
   "coveragePathIgnorePatterns": ["index.ts", "/types"]
 }
