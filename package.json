@@ -1,6 +1,6 @@
 {
   "name": "nice-web-routes",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "Easy way to create nice web routes for you application",
   "author": "Artem Ignatev <art.ser.ignatiev@gmail.com>",
   "repository": "git@github.com:tomas-light/nice-web-routes.git",
@@ -22,15 +22,15 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "devDependencies": {
-    "@types/jest": "29.2.5",
-    "@typescript-eslint/eslint-plugin": "5.48.0",
-    "@typescript-eslint/parser": "5.48.0",
-    "eslint": "8.31.0",
-    "eslint-plugin-sonarjs": "0.17.0",
-    "jest": "29.3.1",
-    "prettier": "2.8.1",
-    "ts-jest": "29.0.3",
-    "typescript": "4.9.4"
+    "@types/jest": "29.5.8",
+    "@typescript-eslint/eslint-plugin": "6.11.0",
+    "@typescript-eslint/parser": "6.11.0",
+    "eslint": "8.53.0",
+    "eslint-plugin-sonarjs": "0.23.0",
+    "jest": "29.7.0",
+    "prettier": "3.1.0",
+    "ts-jest": "29.1.1",
+    "typescript": "5.2.2"
   },
   "packageManager": "yarn@3.5.0"
 }
