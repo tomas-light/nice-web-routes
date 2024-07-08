@@ -1,4 +1,4 @@
-import { defaultSegmentValueGetter } from '../defaultSegmentValueGetter';
+import { defaultSegmentValueGetter } from '../defaultSegmentValueGetter.js';
 import {
   type BaseRouteSetter,
   NICE_WEB_ROUTE_URLS_KEYS,
@@ -6,10 +6,10 @@ import {
   type NiceWebRoutesNode,
   type NiceWebRouteUrls,
   type ParametrizedNiceWebRoute,
-} from '../types';
-import { DefaultUrlBuilder, snakeCaseToDashCase } from '../utils';
-import { joinRouteSegments } from '../utils/joinRouteSegments';
-import { type CreatingStrategy } from './CreatingStrategy';
+} from '../types/index.js';
+import { DefaultUrlBuilder, snakeCaseToDashCase } from '../utils/index.js';
+import { joinRouteSegments } from '../utils/joinRouteSegments.js';
+import { type CreatingStrategy } from './CreatingStrategy.js';
 
 /**
  * Create nested routes when parametrized routes are called.

@@ -1,16 +1,26 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "declaration": true,
-    "esModuleInterop": true,
-    "module": "CommonJS",
-    "moduleResolution": "node",
+    "declaration": false,
+    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
+    "inlineSources": true,
+    "isolatedModules": true,
+    "listEmittedFiles": false,
+    "listFiles": false,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "noErrorTruncation": true,
+    "noFallthroughCasesInSwitch": true,
     "outDir": "./dist",
+    "pretty": true,
+    "rootDir": "src",
     "skipLibCheck": true,
-    "strict": true,
     "sourceMap": true,
-    "target": "ESNext"
+    "strict": true,
+    "target": "ESNext",
+    "traceResolution": false
   },
-  "include": ["src", "jest.config.ts"]
+  "exclude": ["node_modules", "dist"],
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

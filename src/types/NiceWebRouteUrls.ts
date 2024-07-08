@@ -1,4 +1,4 @@
-import type { BaseRouteSetter } from './NiceWebRoutesNode';
+import type { BaseRouteSetter } from './NiceWebRoutesNode.js';
 
 export type NiceWebRouteUrls = {
   url: (searchParams?: Record<string, string | string[]> | string) => string;

@@ -1,4 +1,5 @@
-import { DefaultUrlBuilder } from './DefaultUrlBuilder';
+import { expect, test } from 'vitest';
+import { DefaultUrlBuilder } from './DefaultUrlBuilder.js';
 
 test('if url with only pathname will be built correctly', () => {
   const builder = new DefaultUrlBuilder();

@@ -1,4 +1,4 @@
-import { type GetSegmentValue } from './types';
+import { type GetSegmentValue } from './types/index.js';
 
 export const defaultSegmentValueGetter: GetSegmentValue = (
   segmentName,

@@ -1,5 +1,5 @@
-import { createObjectNiceWebRoutes } from './createObjectNiceWebRoutes';
-import { createProxyNiceWebRoutes } from './createProxyNiceWebRoutes';
+import { createObjectNiceWebRoutes } from './createObjectNiceWebRoutes.js';
+import { createProxyNiceWebRoutes } from './createProxyNiceWebRoutes.js';
 
 export const creatingStrategies = {
   object: createObjectNiceWebRoutes,

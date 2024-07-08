@@ -2,8 +2,8 @@ import {
   type BaseRouteSetter,
   type NiceWebRoutesDescription,
   type NiceWebRoutesNode,
-} from '../types';
-import { type FactoryConfig } from './FactoryConfig';
+} from '../types/index.js';
+import { type FactoryConfig } from './FactoryConfig.js';
 
 export type CreatingStrategy = (
   config?: Omit<FactoryConfig, 'creatingStrategy'>

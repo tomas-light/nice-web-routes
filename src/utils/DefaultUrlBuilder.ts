@@ -1,5 +1,5 @@
-import { joinRouteSegments } from './joinRouteSegments';
-import { type UrlBuilder } from './UrlBuilder';
+import { joinRouteSegments } from './joinRouteSegments.js';
+import { type UrlBuilder } from './UrlBuilder.js';
 
 class DefaultUrlBuilder implements UrlBuilder {
   private pathname = '';

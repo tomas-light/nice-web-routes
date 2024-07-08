@@ -1,4 +1,5 @@
-import { snakeCaseToDashCase } from './snakeCaseToDashCase';
+import { expect, test } from 'vitest';
+import { snakeCaseToDashCase } from './snakeCaseToDashCase.js';
 
 test('if function is safe for empty value', () => {
   expect(snakeCaseToDashCase('')).toBe('');

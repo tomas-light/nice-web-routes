@@ -1,4 +1,4 @@
-import { NiceWebRouteUrls } from './NiceWebRouteUrls';
+import { NiceWebRouteUrls } from './NiceWebRouteUrls.js';
 
 type NiceWebRoutesNode<
   DescriptionShape extends object,

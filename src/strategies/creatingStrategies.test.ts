@@ -1,8 +1,9 @@
-import { NICE_WEB_ROUTE_URLS_KEYS } from '../types';
+import { describe, expect, test } from 'vitest';
+import { NICE_WEB_ROUTE_URLS_KEYS } from '../types/index.js';
 import {
   creatingStrategies,
   type CreatingStrategyVariant,
-} from './creatingStrategies';
+} from './creatingStrategies.js';
 
 const testTable = Array.from(
   Object.keys(creatingStrategies).map((strategyName) => [
