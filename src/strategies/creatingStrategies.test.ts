@@ -1,8 +1,9 @@
-import { NICE_WEB_ROUTE_URLS_KEYS } from '../types';
+import { describe, expect, test } from 'vitest';
+import { NICE_WEB_ROUTE_URLS_KEYS } from '../types/index.js';
 import {
   creatingStrategies,
-  CreatingStrategyVariant,
-} from './creatingStrategies';
+  type CreatingStrategyVariant,
+} from './creatingStrategies.js';
 
 const testTable = Array.from(
   Object.keys(creatingStrategies).map((strategyName) => [
@@ -108,6 +109,11 @@ describe.each(testTable)('%s creating strategy', (strategyName) => {
         routes.user.userId('12').url({ avatarSize: '64', about: 'hide' })
       ).toBe('/user/12?avatarSize=64&about=hide');
     });
+    test('if array search param are added correctly to the url', () => {
+      expect(routes.user.userId('12').url({ ids: ['foo', 'bar', 'zoo'] })).toBe(
+        '/user/12?ids=foo&ids=bar&ids=zoo'
+      );
+    });
   });
 
   describe('if snakeTransformation override works', () => {
@@ -159,5 +165,21 @@ describe.each(testTable)('%s creating strategy', (strategyName) => {
     const descriptionKeys = Object.keys(description);
     const urlKeys = NICE_WEB_ROUTE_URLS_KEYS.length;
     expect(keys.length).toBe(descriptionKeys.length + urlKeys);
+  });
+
+  test('if base route can be changed after routes creation', () => {
+    const routes = strategy()(description);
+    expect(routes.users.url()).toBe('/users');
+    expect(routes.users.relativeUrl()).toBe('users');
+    expect(routes.users.statistic.url()).toBe('/users/statistic');
+    expect(routes.users.statistic.relativeUrl()).toBe('statistic');
+    expect(routes.article().url()).toBe('/:article');
+
+    routes.setBaseRoute('/en');
+    expect(routes.users.url()).toBe('/en/users');
+    expect(routes.users.relativeUrl()).toBe('users');
+    expect(routes.users.statistic.url()).toBe('/en/users/statistic');
+    expect(routes.users.statistic.relativeUrl()).toBe('statistic');
+    expect(routes.article().url()).toBe('/en/:article');
   });
 });

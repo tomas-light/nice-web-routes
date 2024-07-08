@@ -1,10 +1,9 @@
-import { isNullOrUndefined } from './isNullOrUndefined';
-import { joinRouteSegments } from './joinRouteSegments';
-import { UrlBuilder } from './UrlBuilder';
+import { joinRouteSegments } from './joinRouteSegments.js';
+import { type UrlBuilder } from './UrlBuilder.js';
 
 class DefaultUrlBuilder implements UrlBuilder {
   private pathname = '';
-  private searchParams: Record<string, string> = {};
+  private searchParams: Record<string, string | string[]> = {};
   private additionalString = '';
 
   addPathnameIfExists(pathname?: string) {
@@ -15,7 +14,9 @@ class DefaultUrlBuilder implements UrlBuilder {
     return this;
   }
 
-  addSearchParamsIfExists(searchParams?: Record<string, string> | string) {
+  addSearchParamsIfExists(
+    searchParams?: Record<string, string | string[]> | string
+  ) {
     if (!searchParams) {
       return this;
     }
@@ -38,8 +39,14 @@ class DefaultUrlBuilder implements UrlBuilder {
     const url = new URL(this.pathname, urlBase);
 
     Object.entries(this.searchParams).forEach(([name, value]) => {
-      if (!isNullOrUndefined(value)) {
-        url.searchParams.append(name, value.toString());
+      if (value != null) {
+        if (Array.isArray(value)) {
+          value.forEach((oneOfValue) => {
+            url.searchParams.append(name, oneOfValue.toString());
+          });
+        } else {
+          url.searchParams.append(name, value.toString());
+        }
       }
     });
 

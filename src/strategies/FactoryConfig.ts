@@ -1,6 +1,6 @@
-import { GetSegmentValue } from '../types/GetSegmentValue';
-import { UrlBuilderConstructor } from '../utils';
-import { CreatingStrategyVariant } from './creatingStrategies';
+import { type GetSegmentValue } from '../types/GetSegmentValue.js';
+import { type UrlBuilderConstructor } from '../utils/index.js';
+import { type CreatingStrategyVariant } from './creatingStrategies.js';
 
 export type FactoryConfig = {
   getSegmentValue?: GetSegmentValue;

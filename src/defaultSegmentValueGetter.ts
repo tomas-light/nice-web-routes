@@ -1,11 +1,10 @@
-import { GetSegmentValue } from './types';
-import { isNullOrUndefined } from './utils';
+import { type GetSegmentValue } from './types/index.js';
 
 export const defaultSegmentValueGetter: GetSegmentValue = (
   segmentName,
   segmentValue
 ) => {
-  if (isNullOrUndefined(segmentValue)) {
+  if (segmentValue == null) {
     return `:${String(segmentName)}`;
   }
   return segmentValue;

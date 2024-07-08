@@ -1,4 +1,5 @@
-import { DefaultUrlBuilder } from './DefaultUrlBuilder';
+import { expect, test } from 'vitest';
+import { DefaultUrlBuilder } from './DefaultUrlBuilder.js';
 
 test('if url with only pathname will be built correctly', () => {
   const builder = new DefaultUrlBuilder();
@@ -69,4 +70,14 @@ test('if additional string was passed in search params with other data', () => {
     .addSearchParamsIfExists('*')
     .build();
   expect(url).toBe('/some-url/asd*');
+});
+
+test('if array search param are added correctly to the url', () => {
+  const builder = new DefaultUrlBuilder();
+  const url = builder
+    .addPathnameIfExists('user')
+    .addPathnameIfExists('12')
+    .addSearchParamsIfExists({ ids: ['foo', 'bar', 'zoo'] })
+    .build();
+  expect(url).toBe('/user/12?ids=foo&ids=bar&ids=zoo');
 });

@@ -1,14 +1,15 @@
-import { defaultSegmentValueGetter } from '../defaultSegmentValueGetter';
-import { joinRouteSegments } from '../utils/joinRouteSegments';
+import { defaultSegmentValueGetter } from '../defaultSegmentValueGetter.js';
 import {
+  type BaseRouteSetter,
   NICE_WEB_ROUTE_URLS_KEYS,
-  NiceWebRoutesDescription,
-  NiceWebRoutesNode,
-  NiceWebRouteUrls,
-  ParametrizedNiceWebRoute,
-} from '../types';
-import { DefaultUrlBuilder, snakeCaseToDashCase } from '../utils';
-import { CreatingStrategy } from './CreatingStrategy';
+  type NiceWebRoutesDescription,
+  type NiceWebRoutesNode,
+  type NiceWebRouteUrls,
+  type ParametrizedNiceWebRoute,
+} from '../types/index.js';
+import { DefaultUrlBuilder, snakeCaseToDashCase } from '../utils/index.js';
+import { joinRouteSegments } from '../utils/joinRouteSegments.js';
+import { type CreatingStrategy } from './CreatingStrategy.js';
 
 /**
  * Create nested routes when parametrized routes are called.
@@ -16,42 +17,59 @@ import { CreatingStrategy } from './CreatingStrategy';
  * It traverses description tree for objects nodes, and on each parametrized
  * node call (be careful if you have many of this)
  * */
-export const createObjectNiceWebRoutes: CreatingStrategy = (config = {}) =>
-  function <DescriptionShape extends object>(
+export const createObjectNiceWebRoutes: CreatingStrategy = (config = {}) => {
+  const {
+    getSegmentValue = defaultSegmentValueGetter,
+    urlBuilderImpl = DefaultUrlBuilder,
+    snakeTransformation = {
+      disableForSegmentName: false,
+      disableForSegmentValue: false,
+    },
+  } = config;
+
+  return function createRoutes<DescriptionShape extends object>(
     niceWebRoutesDescription: NiceWebRoutesDescription<DescriptionShape>,
-    parentRoute: string = '',
-    currentSegmentName: string = ''
+    options?: {
+      parentRoute?: string;
+      currentSegmentName?: string;
+    }
   ): NiceWebRoutesNode<
     DescriptionShape,
     NiceWebRoutesDescription<DescriptionShape>
-  > {
-    const {
-      getSegmentValue = defaultSegmentValueGetter,
-      urlBuilderImpl = DefaultUrlBuilder,
-      snakeTransformation = {
-        disableForSegmentName: false,
-        disableForSegmentValue: false,
-      },
-    } = config;
-
-    const routePath = joinRouteSegments(parentRoute, currentSegmentName);
+  > &
+    BaseRouteSetter {
+    if (!options) {
+      options = {
+        parentRoute: '',
+        currentSegmentName: '',
+      };
+    }
+    if (options.parentRoute == null) {
+      options.parentRoute = '';
+    }
+    if (options.currentSegmentName == null) {
+      options.currentSegmentName = '';
+    }
 
     const node = {
-      url: function <Search extends Record<string, string>>(
-        searchParams?: Search | string
-      ) {
+      url: function (searchParams) {
+        const routePath = joinRouteSegments(
+          options!.parentRoute!,
+          options!.currentSegmentName!
+        );
+
         return new urlBuilderImpl()
           .addPathnameIfExists(routePath)
           .addSearchParamsIfExists(searchParams)
           .build();
       },
       relativeUrl: function (additionalString: string = '') {
-        return currentSegmentName + additionalString;
+        return options!.currentSegmentName! + additionalString;
       },
-    } as NiceWebRoutesNode<
-      DescriptionShape,
-      NiceWebRoutesDescription<DescriptionShape>
-    >;
+      setBaseRoute: (newBaseRoute) => {
+        options!.parentRoute = newBaseRoute;
+      },
+    } as ReturnType<typeof createRoutes<DescriptionShape>>;
 
     for (const [descriptionSegment, descriptionSegmentValue] of Object.entries(
       niceWebRoutesDescription
@@ -73,11 +91,18 @@ export const createObjectNiceWebRoutes: CreatingStrategy = (config = {}) =>
           segment = snakeCaseToDashCase(descriptionSegment);
         }
 
-        node[descriptionSegment] = createObjectNiceWebRoutes(config)(
+        node[descriptionSegment] = createRoutes(
           descriptionSegmentValue as NiceWebRoutesDescription<object>,
-          routePath,
-          segment
-        ) as unknown as typeof node[typeof descriptionSegment];
+          {
+            get parentRoute() {
+              return joinRouteSegments(
+                options!.parentRoute!,
+                options!.currentSegmentName!
+              );
+            },
+            currentSegmentName: segment,
+          }
+        ) as unknown as (typeof node)[typeof descriptionSegment];
 
         continue;
       }
@@ -93,15 +118,23 @@ export const createObjectNiceWebRoutes: CreatingStrategy = (config = {}) =>
 
           return createObjectNiceWebRoutes(config)(
             description as NiceWebRoutesDescription<object>,
-            routePath,
-            segmentValue
+            {
+              get parentRoute() {
+                return joinRouteSegments(
+                  options!.parentRoute!,
+                  options!.currentSegmentName!
+                );
+              },
+              currentSegmentName: segmentValue,
+            }
           );
         };
 
         node[descriptionSegment] =
-          parametrizedRoute as unknown as typeof node[typeof descriptionSegment];
+          parametrizedRoute as unknown as (typeof node)[typeof descriptionSegment];
       }
     }
 
     return node;
   };
+};

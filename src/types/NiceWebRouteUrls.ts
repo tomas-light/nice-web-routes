@@ -1,11 +1,10 @@
+import type { BaseRouteSetter } from './NiceWebRoutesNode.js';
+
 export type NiceWebRouteUrls = {
-  url: <Search extends Record<string, string>>(
-    searchParams?: Search | string
-  ) => string;
+  url: (searchParams?: Record<string, string | string[]> | string) => string;
   relativeUrl: (additionalString?: string) => string;
 };
 
-export const NICE_WEB_ROUTE_URLS_KEYS: (keyof NiceWebRouteUrls)[] = [
-  'url',
-  'relativeUrl',
-];
+export const NICE_WEB_ROUTE_URLS_KEYS: Array<
+  keyof (NiceWebRouteUrls & BaseRouteSetter)
+> = ['url', 'relativeUrl', 'setBaseRoute'];

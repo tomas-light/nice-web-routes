@@ -1,3 +1,3 @@
 export function snakeCaseToDashCase(segment: string) {
-	return segment?.replaceAll('_', '-') ?? '';
+  return segment?.replaceAll('_', '-') ?? '';
 }

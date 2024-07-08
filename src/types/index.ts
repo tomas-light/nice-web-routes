@@ -1,3 +1,3 @@
-export * from './GetSegmentValue';
-export * from './NiceWebRoutesNode';
-export * from './NiceWebRouteUrls';
+export * from './GetSegmentValue.js';
+export * from './NiceWebRoutesNode.js';
+export * from './NiceWebRouteUrls.js';

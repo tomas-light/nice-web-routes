@@ -1,54 +1,75 @@
-import { defaultSegmentValueGetter } from '../defaultSegmentValueGetter';
-import { joinRouteSegments } from '../utils/joinRouteSegments';
+import { defaultSegmentValueGetter } from '../defaultSegmentValueGetter.js';
 import {
+  type BaseRouteSetter,
   NICE_WEB_ROUTE_URLS_KEYS,
-  NiceWebRoutesDescription,
-  NiceWebRoutesNode,
-  NiceWebRouteUrls,
-  ParametrizedNiceWebRoute,
-} from '../types';
-import { DefaultUrlBuilder, snakeCaseToDashCase } from '../utils';
-import { CreatingStrategy } from './CreatingStrategy';
+  type NiceWebRoutesDescription,
+  type NiceWebRoutesNode,
+  type NiceWebRouteUrls,
+  type ParametrizedNiceWebRoute,
+} from '../types/index.js';
+import { DefaultUrlBuilder, snakeCaseToDashCase } from '../utils/index.js';
+import { joinRouteSegments } from '../utils/joinRouteSegments.js';
+import { type CreatingStrategy } from './CreatingStrategy.js';
 
-type ProxyType = object & NiceWebRouteUrls;
+type ProxyType = object & NiceWebRouteUrls & BaseRouteSetter;
 
 /**
  * Create proxy for each tree node when that node is accessed.
  * It is good option, if you have large route tree or many nested routes under
  * parametrized routes, because it will not traverse entire tree on each node call.
  * */
-export const createProxyNiceWebRoutes: CreatingStrategy = (config = {}) =>
-  function <DescriptionShape extends object>(
+export const createProxyNiceWebRoutes: CreatingStrategy = (config = {}) => {
+  const {
+    getSegmentValue = defaultSegmentValueGetter,
+    urlBuilderImpl = DefaultUrlBuilder,
+    snakeTransformation = {
+      disableForSegmentName: false,
+      disableForSegmentValue: false,
+    },
+  } = config;
+
+  return function createRoutes<DescriptionShape extends object>(
     niceWebRoutesDescription: NiceWebRoutesDescription<DescriptionShape>,
-    parentRoute: string = '',
-    currentSegmentName: string = ''
+    options?: {
+      parentRoute?: string;
+      currentSegmentName?: string;
+    }
   ): NiceWebRoutesNode<
     DescriptionShape,
     NiceWebRoutesDescription<DescriptionShape>
-  > {
-    const {
-      getSegmentValue = defaultSegmentValueGetter,
-      urlBuilderImpl = DefaultUrlBuilder,
-      snakeTransformation = {
-        disableForSegmentName: false,
-        disableForSegmentValue: false,
-      },
-    } = config;
-
-    const routePath = joinRouteSegments(parentRoute, currentSegmentName);
+  > &
+    BaseRouteSetter {
+    if (!options) {
+      options = {
+        parentRoute: '',
+        currentSegmentName: '',
+      };
+    }
+    if (options.parentRoute == null) {
+      options.parentRoute = '';
+    }
+    if (options.currentSegmentName == null) {
+      options.currentSegmentName = '';
+    }
 
     const proxy = new Proxy<ProxyType>(
       {
-        url: function <Search extends Record<string, string>>(
-          searchParams?: Search | string
-        ) {
+        url: function (searchParams) {
+          const routePath = joinRouteSegments(
+            options!.parentRoute!,
+            options!.currentSegmentName!
+          );
+
           return new urlBuilderImpl()
             .addPathnameIfExists(routePath)
             .addSearchParamsIfExists(searchParams)
             .build();
         },
         relativeUrl: function (additionalString: string = '') {
-          return currentSegmentName + additionalString;
+          return options!.currentSegmentName! + additionalString;
+        },
+        setBaseRoute: (newBaseRoute) => {
+          options!.parentRoute = newBaseRoute;
         },
       },
       {
@@ -91,10 +112,17 @@ export const createProxyNiceWebRoutes: CreatingStrategy = (config = {}) =>
             } else {
               segment = snakeCaseToDashCase(propertyName);
             }
-            return createProxyNiceWebRoutes(config)(
+            return createRoutes(
               segmentDescription as NiceWebRoutesDescription<object>,
-              routePath,
-              segment
+              {
+                get parentRoute() {
+                  return joinRouteSegments(
+                    options!.parentRoute!,
+                    options!.currentSegmentName!
+                  );
+                },
+                currentSegmentName: segment,
+              }
             );
           }
 
@@ -109,10 +137,17 @@ export const createProxyNiceWebRoutes: CreatingStrategy = (config = {}) =>
                 segmentValue = snakeCaseToDashCase(segmentValue);
               }
 
-              return createProxyNiceWebRoutes(config)(
+              return createRoutes(
                 description as NiceWebRoutesDescription<object>,
-                routePath,
-                segmentValue
+                {
+                  get parentRoute() {
+                    return joinRouteSegments(
+                      options!.parentRoute!,
+                      options!.currentSegmentName!
+                    );
+                  },
+                  currentSegmentName: segmentValue,
+                }
               );
             };
 
@@ -124,8 +159,6 @@ export const createProxyNiceWebRoutes: CreatingStrategy = (config = {}) =>
       }
     );
 
-    return proxy as NiceWebRoutesNode<
-      DescriptionShape,
-      NiceWebRoutesDescription<DescriptionShape>
-    >;
+    return proxy as ReturnType<typeof createRoutes<DescriptionShape>>;
   };
+};
