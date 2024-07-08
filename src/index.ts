@@ -3,7 +3,7 @@ export * from './createNiceWebRoutes';
 export * from './strategies';
 export * from './types';
 export {
-  UrlBuilder,
+  type UrlBuilder,
   DefaultUrlBuilder,
   joinRouteSegments,
   snakeCaseToDashCase,

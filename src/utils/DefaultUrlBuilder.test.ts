@@ -70,3 +70,13 @@ test('if additional string was passed in search params with other data', () => {
     .build();
   expect(url).toBe('/some-url/asd*');
 });
+
+test('if array search param are added correctly to the url', () => {
+  const builder = new DefaultUrlBuilder();
+  const url = builder
+    .addPathnameIfExists('user')
+    .addPathnameIfExists('12')
+    .addSearchParamsIfExists({ ids: ['foo', 'bar', 'zoo'] })
+    .build();
+  expect(url).toBe('/user/12?ids=foo&ids=bar&ids=zoo');
+});

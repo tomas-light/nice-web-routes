@@ -4,5 +4,6 @@
   "useTabs": false,
   "semi": true,
   "tabWidth": 2,
-  "bracketSameLine": false
+  "bracketSameLine": false,
+  "trailingComma": "es5"
 }

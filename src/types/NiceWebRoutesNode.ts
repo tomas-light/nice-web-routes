@@ -47,15 +47,56 @@ type NiceWebRoutesDescriptionValue<MaybeObjectOrFunction> =
           ? () => NiceWebRoutesDescription<FunctionResult>
           : 'parametrized argument has to be a string'
 
-    : 'function description has to return an object'
+      : 'function description has to return an object'
 
-  : MaybeObjectOrFunction extends object
-    ? NiceWebRoutesDescription<MaybeObjectOrFunction>
-    : 'route description has to be an object or function';
+    : MaybeObjectOrFunction extends object
+      ? NiceWebRoutesDescription<MaybeObjectOrFunction>
+      : 'route description has to be an object or function';
+
+type BaseRouteSetter = {
+  /** if you would like to change base route after routes are created, it is the right place
+   * @example
+   * // generally you choose to use base route or don't on routes creation time
+   * const routes = createObjectNiceWebRoutes({
+   *   home: {},
+   *   welcome: {},
+   * });
+   *
+   * routes.home.url(); // "/home"
+   * routes.welcome.url(); // "/welcome"
+   *
+   * const apiRoutes = createObjectNiceWebRoutes({
+   *   users: {
+   *     userId: () => ({}),
+   *   },
+   * }, { parentRoute: '/api/v4' });
+   *
+   * routes.users.url(); // "/api/v4/users"
+   * routes.users.userId("123").url(); // "/api/v4/users/123"
+   *
+   * // but there are some cases when you need to change base route dynamically,
+   * // for example if your routes are started with locale
+   * const routes = createObjectNiceWebRoutes({
+   *   home: {},
+   *   welcome: {},
+   * }, { parentRoute: '/en' });
+   *
+   * routes.home.url(); // "/en/home"
+   * routes.welcome.url(); // "/en/welcome"
+   *
+   * // and after user changes page language, routes should be changed as well
+   * routes.setBaseRoute("/de");
+   *
+   * routes.home.url(); // "/de/home"
+   * routes.welcome.url(); // "/de/welcome"
+   * */
+  setBaseRoute: (baseRoute: string) => void;
+}
 
 export type {
+  BaseRouteSetter,
   NiceWebRoutesNode,
   ParametrizedNiceWebRoute,
   NestedNiceWebRoutes,
-  NiceWebRoutesDescription,
+  NiceWebRoutesDescription
 };

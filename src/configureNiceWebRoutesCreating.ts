@@ -1,7 +1,7 @@
 import {
   createObjectNiceWebRoutes,
   createProxyNiceWebRoutes,
-  FactoryConfig,
+  type FactoryConfig,
 } from './strategies';
 
 function configureNiceWebRoutesCreating(config: FactoryConfig = {}) {
