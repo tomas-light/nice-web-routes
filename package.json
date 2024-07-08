@@ -1,13 +1,13 @@
 {
   "name": "nice-web-routes",
   "type": "module",
-  "version": "2.0.0-dev.1",
+  "version": "2.0.0",
   "description": "Easy way to create nice web routes for you application",
   "author": "Artem Ignatev <art.ser.ignatiev@gmail.com>",
   "repository": "git@github.com:tomas-light/nice-web-routes.git",
-  "homepage": "https://github.com/TomasLight/nice-web-routes#readme",
+  "homepage": "https://github.com/tomas-light/nice-web-routes#readme",
   "bugs": {
-    "url": "https://github.com/TomasLight/nice-web-routes/issues"
+    "url": "https://github.com/tomas-light/nice-web-routes/issues"
   },
   "license": "MIT",
   "scripts": {
@@ -41,7 +41,7 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "build-instructions": {
-    "name": "cheap-di",
+    "name": "nice-web-routes",
     "files": [
       "cjs/**/*",
       "esm/**/*",
