@@ -11,6 +11,12 @@ import { DefaultUrlBuilder, snakeCaseToDashCase } from '../utils/index.js';
 import { joinRouteSegments } from '../utils/joinRouteSegments.js';
 import { type CreatingStrategy } from './CreatingStrategy.js';
 
+type CreatedRoutes<DescriptionShape extends object> = NiceWebRoutesNode<
+  DescriptionShape,
+  NiceWebRoutesDescription<DescriptionShape>
+> &
+  BaseRouteSetter;
+
 /**
  * Create nested routes when parametrized routes are called.
  * It is good option, when you have no large trees under parametrized routes.
@@ -33,11 +39,7 @@ export const createObjectNiceWebRoutes: CreatingStrategy = (config = {}) => {
       parentRoute?: string;
       currentSegmentName?: string;
     }
-  ): NiceWebRoutesNode<
-    DescriptionShape,
-    NiceWebRoutesDescription<DescriptionShape>
-  > &
-    BaseRouteSetter {
+  ): CreatedRoutes<DescriptionShape> {
     if (!options) {
       options = {
         parentRoute: '',
@@ -52,7 +54,9 @@ export const createObjectNiceWebRoutes: CreatingStrategy = (config = {}) => {
     }
 
     const node = {
-      url: function (searchParams) {
+      url: function (
+        searchParams: Parameters<CreatedRoutes<DescriptionShape>['url']>[number]
+      ) {
         const routePath = joinRouteSegments(
           options!.parentRoute!,
           options!.currentSegmentName!
@@ -66,10 +70,14 @@ export const createObjectNiceWebRoutes: CreatingStrategy = (config = {}) => {
       relativeUrl: function (additionalString: string = '') {
         return options!.currentSegmentName! + additionalString;
       },
-      setBaseRoute: (newBaseRoute) => {
+      setBaseRoute: (
+        newBaseRoute: Parameters<
+          CreatedRoutes<DescriptionShape>['setBaseRoute']
+        >[number]
+      ) => {
         options!.parentRoute = newBaseRoute;
       },
-    } as ReturnType<typeof createRoutes<DescriptionShape>>;
+    } as CreatedRoutes<DescriptionShape>;
 
     for (const [descriptionSegment, descriptionSegmentValue] of Object.entries(
       niceWebRoutesDescription
