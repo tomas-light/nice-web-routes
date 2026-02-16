@@ -15,7 +15,7 @@ class DefaultUrlBuilder implements UrlBuilder {
   }
 
   addSearchParamsIfExists(
-    searchParams?: Record<string, string | string[]> | string
+    searchParams?: URLSearchParams | Record<string, string | string[]> | string
   ) {
     if (!searchParams) {
       return this;
@@ -23,6 +23,21 @@ class DefaultUrlBuilder implements UrlBuilder {
 
     if (typeof searchParams === 'string') {
       this.additionalString = searchParams;
+      return this;
+    }
+
+    if (searchParams instanceof URLSearchParams) {
+      searchParams.forEach((value, key) => {
+        const existedValue = this.searchParams[key];
+
+        if (!existedValue) {
+          this.searchParams[key] = value;
+        } else if (Array.isArray(existedValue)) {
+          existedValue.push(value);
+        } else {
+          this.searchParams[key] = [existedValue, value];
+        }
+      });
       return this;
     }
 
@@ -56,7 +71,7 @@ class DefaultUrlBuilder implements UrlBuilder {
       builtUrl += this.additionalString;
     }
 
-    return builtUrl;
+    return decodeURIComponent(builtUrl);
   }
 }
 

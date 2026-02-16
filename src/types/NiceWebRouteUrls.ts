@@ -1,7 +1,9 @@
 import type { BaseRouteSetter } from './NiceWebRoutesNode.js';
 
 export type NiceWebRouteUrls = {
-  url: (searchParams?: Record<string, string | string[]> | string) => string;
+  url: (
+    searchParams?: URLSearchParams | Record<string, string | string[]> | string
+  ) => string;
   relativeUrl: (additionalString?: string) => string;
 };
 
