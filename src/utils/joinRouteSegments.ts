@@ -6,14 +6,35 @@
 function joinRouteSegments(...segments: string[]) {
   const routeSegmentSeparator = '/';
 
-  return segments
-    .flatMap((segment) => segment.split(routeSegmentSeparator))
-    .map((segment) => {
-      if (segment.endsWith(routeSegmentSeparator)) {
-        return segment.slice(0, segment.length - 2);
-      }
-      return segment;
-    })
+  const parts = segments.slice();
+
+  const sanitizedSegments: string[] = [];
+
+  let currentSegment = parts.shift();
+  while (currentSegment != null) {
+    if (
+      currentSegment.startsWith('http://') ||
+      currentSegment.startsWith('https://')
+    ) {
+      sanitizedSegments.push(currentSegment);
+      currentSegment = parts.shift();
+      continue;
+    }
+
+    let separatorIndex = currentSegment.indexOf(routeSegmentSeparator);
+    if (separatorIndex === -1) {
+      sanitizedSegments.push(currentSegment);
+      currentSegment = parts.shift();
+      continue;
+    }
+
+    const segment = currentSegment.substring(0, separatorIndex);
+    sanitizedSegments.push(segment);
+
+    currentSegment = currentSegment.substring(separatorIndex + 1);
+  }
+
+  return sanitizedSegments
     .filter((segment) => segment !== '')
     .join(routeSegmentSeparator);
 }

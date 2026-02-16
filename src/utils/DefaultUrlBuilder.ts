@@ -56,7 +56,7 @@ class DefaultUrlBuilder implements UrlBuilder {
       builtUrl += this.additionalString;
     }
 
-    return builtUrl;
+    return decodeURIComponent(builtUrl);
   }
 }
 
