@@ -91,4 +91,16 @@ describe('[class] DefaultUrlBuilder', () => {
       .build();
     expect(url).toBe('/indicator/https://почта.рф/11');
   });
+
+  test('if URLSearchParams are handled as well', () => {
+    const builder = new DefaultUrlBuilder();
+
+    const searchParams = new URLSearchParams();
+    searchParams.append('name', 'John');
+    searchParams.append('tags', 'human');
+    searchParams.append('tags', 'student');
+
+    const url = builder.addSearchParamsIfExists(searchParams).build();
+    expect(url).toBe('/?name=John&tags=human&tags=student');
+  });
 });
